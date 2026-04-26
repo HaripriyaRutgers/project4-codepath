@@ -1,255 +1,102 @@
-# 🎵 Music Recommender Simulation
+# 🎵 AI-Powered Music Recommender (RAG System)
+
+## The Original Project: Rule-Based Simulation
+Originally, this project was a "Music Recommender Simulation" (built during earlier modules). Its goal was to represent songs and user taste profiles as structured data and use hardcoded, mathematical scoring rules (e.g., adding points for matching genres or energy levels) to rank and recommend songs. While effective as a baseline, it lacked the ability to understand semantic nuances, musical context, or user intent beyond rigid formulas.
 
 ## Project Summary
+This upgraded project transforms that rigid rule-based engine into an intelligent **Retrieval-Augmented Generation (RAG) Chatbot**. 
 
-In this project you will build and explain a small music recommender system.
-
-Your goal is to:
-
-- Represent songs and a user "taste profile" as data
-- Design a scoring rule that turns that data into recommendations
-- Evaluate what your system gets right and wrong
-- Reflect on how this mirrors real world AI recommenders
-
-Replace this paragraph with your own summary of what your version does.
+Instead of relying on hardcoded math, the system stores a diverse catalog of songs in a local Vector Database. When a user asks for a recommendation based on a specific song, the system retrieves their most relevant listening history and provides it as context to a Large Language Model (LLM). The AI then synthesizes this data to recommend a new song that perfectly bridges their tastes, explaining *why* it fits in natural language. This matters because it creates a highly personalized, conversational, and intuitive discovery experience for the user.
 
 ---
 
-## How The System Works
+## 🏗️ Architecture Overview
 
-Explain your design in plain language.
+The system is built on a modern RAG architecture:
+1. **Data Ingestion (`data_loader.py` & `vector_store.py`)**: The system parses a CSV catalog of songs, formats them into descriptive text, and converts them into mathematical vectors using Google's `gemini-embedding-2` model. These are stored locally in **ChromaDB**.
+2. **Retrieval (`app.py`)**: When the user enters a song query, the app searches ChromaDB for the 3 most semantically similar songs from the database to represent relevant listening history.
+3. **Generation (`app.py`)**: A dynamic prompt is constructed combining the user's query and the retrieved history. This is sent to Google's **`gemini-2.5-flash`** LLM, which generates the final, personalized recommendation.
 
-Some prompts to answer:
-
-- What features does each `Song` use in your system
-  - For example: genre, mood, energy, tempo
-- What information does your `UserProfile` store
-- How does your `Recommender` compute a score for each song
-- How do you choose which songs to recommend
-
-You can include a simple diagram or bullet list if helpful.
-
-
-Real-world recommendation systems, like those used by Spotify or YouTube, analyze both user preferences and item attributes to suggest personalized content. They often combine collaborative filtering (using data from similar users) and content-based filtering (matching items to a user's past preferences). In this simulation, our system will prioritize **content-based filtering**, focusing on matching songs to user preferences based on their attributes.
-
-### Features Used:
-- **Song**: Each `Song` will use the following features: `genre`, `mood`, `energy`, `tempo_bpm`, `valence`, `danceability`, and `acousticness`.
-- **UserProfile**: The `UserProfile` will store preferences for `fav_genre`, `fav_mood`, and numerical ranges for `target_energy`, `tempo_bpm`, and other relevant features.
-
-The recommender will compute a score for each song by comparing its attributes to the user's preferences, rewarding songs that are closer to the desired values. The top-scoring songs will be recommended to the user.
-
-
-### Algorithm Recipe
-
-The recommendation system works by scoring each song in the dataset based on how well it matches the user's preferences. The process is as follows:
-
-1. **Input**: The user provides their preferences:
-   - `fav_genre`: Preferred genre.
-   - `fav_mood`: Preferred mood.
-   - `target_energy`: Desired energy level (a value between 0 and 1).
-
-2. **Processing**:
-   - For each song in the dataset:
-     1. **Genre Match**: If the song's genre matches the user's preferred genre, add **3.0 points**.
-     2. **Mood Match**: If the song's mood matches the user's preferred mood, add **2.0 points**.
-     3. **Energy Similarity**: Calculate the energy similarity score using the formula:
-        ```math
-        Energy Score = 5.0 * (1 - |song_energy - target_energy|)
-        ```
-        - A perfect energy match gives the full 5.0 points, while larger differences reduce the score linearly.
-
-3. **Output**:
-   - After processing all songs, sort them by their total score in descending order.
-   - Return the top K songs as recommendations.
-
-   
-
-### Potential Biases
-
-While this system is designed to prioritize user preferences, there are some potential biases to consider:
-- **Genre Over-Prioritization**: The system heavily weights genre matches (+3.0 points), which might cause it to overlook songs with excellent mood or energy matches but from different genres.
-- **Energy Sensitivity**: The energy similarity score is linear, which may not reflect how users perceive energy differences (e.g., small differences might feel negligible to users).
-- **Limited Context**: The system does not account for collaborative filtering (e.g., what similar users like), which could limit its ability to recommend songs outside the user's stated preferences.
-
-By understanding these biases, future iterations of the system can incorporate additional techniques (e.g., collaborative filtering or user feedback loops) to improve recommendation quality.
+![System Architecture](assets/system_architecture.png)
+*(Ensure you have exported the Mermaid diagram to your assets folder!)*
 
 ---
 
-## Getting Started
+## 🚀 Setup Instructions
 
-### Setup
-
-1. Create a virtual environment (optional but recommended):
-
+1. **Clone the repository** and navigate to the project directory.
+2. **Install dependencies**:
    ```bash
-   python -m venv .venv
-   source .venv/bin/activate      # Mac or Linux
-   .venv\Scripts\activate         # Windows
-
-2. Install dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-3. Run the app:
-
-```bash
-python -m src.main
-```
-
-### Running Tests
-
-Run the starter tests with:
-
-```bash
-pytest
-```
-
-You can add more tests in `tests/test_recommender.py`.
+   pip3 install -r requirements.txt
+   ```
+3. **Set up your API Key**:
+   Create a file named `.env` in the root directory and add your Google Gemini API key:
+   ```text
+   GEMINI_API_KEY=your_api_key_here
+   ```
+4. **Initialize the Vector Database**:
+   Run the following script to embed the song catalog into ChromaDB. (You only need to do this once, or whenever the CSV updates).
+   ```bash
+   python3 src/vector_store.py
+   ```
+5. **Run the Chatbot**:
+   ```bash
+   python3 src/app.py
+   ```
 
 ---
 
-## Experiments You Tried
+## 💬 Sample Interactions
 
-Use this section to document the experiments you ran. For example:
+**Input 1:**
+> 🎵 Ask for songs like a specific track: **Summer Days**
 
-- What happened when you changed the weight on genre from 2.0 to 0.5
-- What happened when you added tempo or valence to the score
-- How did your system behave for different types of users
+**AI Output:**
+> [🔍 Searching your listening history...]
+> Found 3 similar songs from your history:
+>   - Summer Days by Beach Bums [Genre: surf rock]
+>   - Ocean Breeze by Waveform [Genre: reggae]
+>   - Island Time by Coconut Crew [Genre: reggae]
+> 
+> ✨ RECOMMENDATION ✨
+> The user enjoys both the energetic sounds of surf rock ("Summer Days") and the laid-back rhythms of reggae. 
+> **Suggested Song:** "Pipeline Pulse" by The Salty Skankers
+> **Why:** It seamlessly blends the upbeat, adventurous spirit of surf rock with a chill, head-nodding reggae groove. The twangy, reverb-drenched guitar melody evokes classic surf rock, while the rhythm section kicks in with a clear, laid-back skanking reggae rhythm.
 
----
+**Input 2:**
+> 🎵 Ask for songs like a specific track: **Sunrise City**
 
-## Limitations and Risks
-
-Summarize some limitations of your recommender.
-
-Examples:
-
-- It only works on a tiny catalog
-- It does not understand lyrics or language
-- It might over favor one genre or mood
-
-You will go deeper on this in your model card.
-
----
-
-## Reflection
-
-Read and complete `model_card.md`:
-
-[**Model Card**](model_card.md)
-
-Write 1 to 2 paragraphs here about what you learned:
-
-- about how recommenders turn data into predictions
-- about where bias or unfairness could show up in systems like this
-
+**AI Output:**
+> [🔍 Searching your listening history...]
+> Found 3 similar songs from your history:
+>   - Sunrise City by Neon Echo [Genre: pop]
+>   - Neon Sunrise by Synth Magic [Genre: synthwave]
+>   - City Lights by Urban Flow [Genre: r&b]
+>
+> ✨ RECOMMENDATION ✨
+> **Suggested Song:** "Midnight Drive" by The Neon Syndicate
+> **Why:** This song perfectly bridges the upbeat, catchy nature of pop with the retro-futuristic, electronic atmosphere of synthwave. It features the driving bassline you love in "Sunrise City", but wraps it in the moody, shimmering synthesizers found in "Neon Sunrise", creating a perfect late-night driving anthem.
 
 ---
 
-## 7. `model_card_template.md`
+## 🧠 Design Decisions & Trade-offs
 
-Combines reflection and model card framing from the Module 3 guidance. :contentReference[oaicite:2]{index=2}  
-
-```markdown
-# 🎧 Model Card - Music Recommender Simulation
-
-## 1. Model Name
-
-Give your recommender a name, for example:
-
-> VibeFinder 1.0
+* **RAG over Fine-Tuning:** I chose to use a RAG approach rather than fine-tuning a model. Fine-tuning is expensive, time-consuming, and difficult to update. RAG allows the database (the CSV catalog) to be updated instantly without ever retraining the AI.
+* **Local ChromaDB vs. Cloud Vector DB:** I utilized a persistent local Chroma database rather than a hosted solution like Pinecone. While a cloud DB scales better for millions of users, a local DB removes latency, eliminates cloud costs, and makes the project entirely self-contained for portfolio demonstration.
+* **Simulated History:** As a trade-off for simplicity, the "user history" is currently simulated by retrieving the nearest neighbors of the inputted song from the static CSV. In a production environment, this would be hooked up to an actual user-profile database logging their chronological listens.
 
 ---
 
-## 2. Intended Use
+## 🧪 Testing Summary
 
-- What is this system trying to do
-- Who is it for
-
-Example:
-
-> This model suggests 3 to 5 songs from a small catalog based on a user's preferred genre, mood, and energy level. It is for classroom exploration only, not for real users.
+* **What worked:** The semantic retrieval is incredibly powerful. ChromaDB successfully identified the nuanced similarities between tracks based on their metadata strings. Gemini 2.5 Flash proved highly capable of taking disparate genres (like Surf Rock and Reggae) and hallucinating highly logical, creative "bridge" songs.
+* **What didn't work initially:** I ran into significant versioning issues with the Google Generative AI Python SDKs. Older SDKs and deprecated models (`text-embedding-004` and `gemini-1.5-flash`) threw 404 errors. 
+* **How it was fixed:** I refactored the entire system to use the modern `google-genai` library, implementing a custom embedding class to ensure ChromaDB natively utilized `gemini-embedding-2`, ensuring the system is fully future-proofed for 2026 standards.
 
 ---
 
-## 3. How It Works (Short Explanation)
+## 🪞 Reflection
 
-Describe your scoring logic in plain language.
+Building this system fundamentally shifted my perspective on AI from a "magic black box" to an orchestratable tool. I learned that an LLM is only as smart as the context you provide it. Instead of feeding a model a massive, expensive prompt with an entire catalog of music, RAG taught me how to surgically inject only the most relevant, targeted information. 
 
-- What features of each song does it consider
-- What information about the user does it use
-- How does it turn those into a number
-
-Try to avoid code in this section, treat it like an explanation to a non programmer.
-
----
-
-## 4. Data
-
-Describe your dataset.
-
-- How many songs are in `data/songs.csv`
-- Did you add or remove any songs
-- What kinds of genres or moods are represented
-- Whose taste does this data mostly reflect
-
----
-
-## 5. Strengths
-
-Where does your recommender work well
-
-You can think about:
-- Situations where the top results "felt right"
-- Particular user profiles it served well
-- Simplicity or transparency benefits
-
----
-
-## 6. Limitations and Bias
-
-Where does your recommender struggle
-
-Some prompts:
-- Does it ignore some genres or moods
-- Does it treat all users as if they have the same taste shape
-- Is it biased toward high energy or one genre by default
-- How could this be unfair if used in a real product
-
----
-
-## 7. Evaluation
-
-How did you check your system
-
-Examples:
-- You tried multiple user profiles and wrote down whether the results matched your expectations
-- You compared your simulation to what a real app like Spotify or YouTube tends to recommend
-- You wrote tests for your scoring logic
-
-You do not need a numeric metric, but if you used one, explain what it measures.
-
----
-
-## 8. Future Work
-
-If you had more time, how would you improve this recommender
-
-Examples:
-
-- Add support for multiple users and "group vibe" recommendations
-- Balance diversity of songs instead of always picking the closest match
-- Use more features, like tempo ranges or lyric themes
-
----
-
-## 9. Personal Reflection
-
-A few sentences about what you learned:
-
-- What surprised you about how your system behaved
-- How did building this change how you think about real music recommenders
-- Where do you think human judgment still matters, even if the model seems "smart"
-
+This project reinforced that successful AI problem-solving is less about writing perfect algorithms, and more about designing clever data pipelines that connect the right information to the right model at the right time.

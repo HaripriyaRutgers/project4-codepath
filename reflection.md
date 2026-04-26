@@ -58,3 +58,21 @@ With the mood check currently turned off, the recommender only looks at genre an
 The system is not wrong by its own rules. It found a pop song with energy close to what was requested and rewarded it. The problem is that the user asked for "happy" music and got a workout track instead, and the system has no way to tell the difference right now because the mood signal is disabled. When the mood check is turned back on, "Gym Hero" would drop by 2.0 points (no mood match) and fall further down the list, which is the more correct behavior.
 
 This illustrates the core tradeoff in the current design: the fewer signals you use, the more the remaining ones get stretched to cover cases they were not meant to handle.
+
+---
+
+## Reflection and Ethics: Thinking Critically About Your AI
+
+### What are the limitations or biases in your system?
+One major limitation is the "popularity" bias that inherently exists in the underlying Gemini model, which might skew recommendations toward globally recognizable tracks even if an indie track from the database might mathematically be a better fit. Additionally, because our RAG system relies entirely on the local CSV dataset provided, the AI's recommendations are severely limited by the diversity (or lack thereof) of the 50 songs currently in our catalog. If the dataset skews heavily toward pop or western genres, the AI cannot confidently recommend international or niche genres without hallucinating.
+
+### Could your AI be misused, and how would you prevent that?
+A music recommender AI has low risk for malicious physical harm, but it could be misused commercially to unfairly boost specific artists if the dataset or embedding space was manipulated (e.g., modern "payola" tactics). To prevent this, I would implement strict, transparent retrieval rules to ensure that songs are sourced entirely based on objective musical feature similarity (tempo, valence, genre) rather than manually inflated, hidden ranking parameters.
+
+### What surprised you while testing your AI's reliability?
+I was surprised by how effectively the AI handled completely illogical requests. When asked to bridge vastly different genres (like Classical and Heavy Metal), the AI didn't just crash or give a generic answer; it assigned a much lower Confidence Score and actively explained that these genres lack common musical ground, proving it is analyzing the context rather than just blind-guessing. 
+
+### Collaboration with AI during this project
+Building this project was a highly collaborative process with the AI agent.
+* **Helpful Suggestion:** When I encountered a persistent 404 Error, the AI correctly diagnosed that Google had deprecated the API endpoints for my previous SDK, and it successfully rewrote my architecture to use the modern `google-genai` package and `gemini-embedding-2`.
+* **Flawed Suggestion:** At one point, when fixing the Python EOL `FutureWarnings` in the terminal, the AI initially seemed prepared to have me upgrade my entire system's Python installation, which could have been a drastic step that might break other local projects. We avoided that by utilizing the Python `warnings` library to safely suppress the output instead.

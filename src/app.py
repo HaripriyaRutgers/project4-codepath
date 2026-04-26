@@ -77,8 +77,17 @@ def chat_loop():
             history_str = "\n".join([f"  - {doc}" for doc in documents])
             print("Found 3 similar songs from your history:\n" + history_str)
             
-            prompt = f"The user likes:\n{history_str}\n\nThey just asked for songs like: {song_x}.\n\nSuggest a new song that bridges these styles and explain why."
-            
+            prompt = f"""The user likes:
+{history_str}
+
+They just asked for songs like: {song_x}.
+
+Respond EXACTLY in this format with NO asterisks, bolding, or markdown formatting:
+
+Recommended Song: [Song Name] by [Artist]
+Why: [2-3 sentences explaining the musical bridge between their history and their request]
+Confidence Score: [0-100%]
+Justification: [1 sentence explaining the confidence score]"""
             print("\n[🧠 Consulting the LLM for a recommendation...]")
             
             # Use gemini-2.5-flash for generation using the new SDK syntax

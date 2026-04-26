@@ -1,7 +1,7 @@
 # 🎵 AI-Powered Music Recommender (RAG System)
 
 ## The Original Project: Rule-Based Simulation
-Originally, this project was a "Music Recommender Simulation" (built during earlier modules). Its goal was to represent songs and user taste profiles as structured data and use hardcoded, mathematical scoring rules (e.g., adding points for matching genres or energy levels) to rank and recommend songs. While effective as a baseline, it lacked the ability to understand semantic nuances, musical context, or user intent beyond rigid formulas.
+Originally, this project was a "Music Recommender Simulation - TuneTribe. Its goal was to represent songs and user taste profiles as structured data and use hardcoded, mathematical scoring rules (e.g., adding points for matching genres or energy levels) to rank and recommend songs. While effective as a baseline, it lacked the ability to understand semantic nuances, musical context, or user intent beyond rigid formulas.
 
 ## Project Summary
 This upgraded project transforms that rigid rule-based engine into an intelligent **Retrieval-Augmented Generation (RAG) Chatbot**. 
@@ -17,7 +17,7 @@ The system is built on a modern RAG architecture:
 2. **Retrieval (`app.py`)**: When the user enters a song query, the app searches ChromaDB for the 3 most semantically similar songs from the database to represent relevant listening history.
 3. **Generation (`app.py`)**: A dynamic prompt is constructed combining the user's query and the retrieved history. This is sent to Google's **`gemini-2.5-flash`** LLM, which generates the final, personalized recommendation.
 
-![System Architecture](assets/system_architecture.png)
+![System Architecture](assets/mermaid-diagram.png)
 *(Ensure you have exported the Mermaid diagram to your assets folder!)*
 
 ---
@@ -89,9 +89,7 @@ The system is built on a modern RAG architecture:
 
 ## 🧪 Testing Summary
 
-* **What worked:** The semantic retrieval is incredibly powerful. ChromaDB successfully identified the nuanced similarities between tracks based on their metadata strings. Gemini 2.5 Flash proved highly capable of taking disparate genres (like Surf Rock and Reggae) and hallucinating highly logical, creative "bridge" songs.
-* **What didn't work initially:** I ran into significant versioning issues with the Google Generative AI Python SDKs. Older SDKs and deprecated models (`text-embedding-004` and `gemini-1.5-flash`) threw 404 errors. 
-* **How it was fixed:** I refactored the entire system to use the modern `google-genai` library, implementing a custom embedding class to ensure ChromaDB natively utilized `gemini-embedding-2`, ensuring the system is fully future-proofed for 2026 standards.
+Testing proved the RAG system performs accurately and logically. By enforcing an AI "Confidence Score," we objectively validated the recommendations. When the query logically connected to the retrieved history (e.g., Surf Rock and Reggae), the AI returned high confidence (85-95%) with clear musical justifications. When queries were disconnected, the AI correctly assigned lower confidence scores, proving it evaluates context rather than just blindly generating. Early API versioning bugs (404 errors) were permanently fixed by migrating to the modern `google-genai` SDK.
 
 ---
 

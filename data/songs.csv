@@ -20,3 +20,34 @@ id,title,artist,genre,mood,energy,tempo_bpm,valence,danceability,acousticness
 18,Starlit Dreams,Galaxy Notes,new age,soothing,0.25,50,0.85,0.45,0.90
 19,Wild Frontier,Nomad Groove,country,nostalgic,0.55,100,0.75,0.65,0.70
 20,Neon Nights,City Glow,disco,celebratory,0.88,120,0.82,0.89,0.15
+
+21,Cyberpunk Pulse,Future Sound,synthwave,intense,0.92,125,0.40,0.70,0.02
+22,Summer Days,Beach Bums,surf rock,happy,0.75,135,0.90,0.65,0.45
+23,Soul's Journey,Ethereal Voices,r&b,soulful,0.55,80,0.60,0.75,0.30
+24,Midnight Train,The Ramblers,blues,nostalgic,0.48,95,0.55,0.50,0.85
+25,Quantum Leap,DJ Nova,edm,party,0.98,140,0.85,0.92,0.05
+26,Autumn Leaves,String Quartet X,classical,sad,0.15,65,0.20,0.30,0.95
+27,Street Rhythm,Beat Kings,hip hop,energetic,0.88,105,0.70,0.85,0.10
+28,Lunar Melody,Space Keys,ambient,chill,0.22,70,0.45,0.35,0.88
+29,Neon Heartbreak,The Outcasts,indie rock,moody,0.68,115,0.35,0.55,0.40
+30,Salsa Magic,Rhythm Rhythms,latin,party,0.85,100,0.92,0.95,0.15
+31,Whispering Pines,Nature's Call,folk,calm,0.25,85,0.50,0.40,0.90
+32,Galactic Drift,Star Voyagers,electronic,focused,0.60,110,0.55,0.70,0.20
+33,Thunderstruck,Iron Hearts,heavy metal,aggressive,0.96,165,0.25,0.45,0.01
+34,Rainy Sunday,Acoustic Muses,singer-songwriter,sad,0.30,75,0.40,0.55,0.85
+35,Vibrant Colors,The Groovers,funk,happy,0.82,108,0.88,0.90,0.12
+36,Shadows,Mystic Mind,trip hop,moody,0.52,90,0.30,0.65,0.35
+37,Golden Era,Classic Cats,jazz,romantic,0.45,88,0.70,0.60,0.75
+38,Velocity,Speed Racers,punk rock,energetic,0.94,175,0.60,0.40,0.05
+39,Dreaming,Cloud Walkers,dream pop,ethereal,0.50,95,0.65,0.50,0.60
+40,Island Time,Coconut Crew,reggae,chill,0.45,82,0.85,0.80,0.55
+41,Electric Love,Neon Daze,synthpop,romantic,0.78,120,0.75,0.78,0.25
+42,Deep Dive,Oceanic Sounds,ambient,calm,0.18,60,0.40,0.25,0.92
+43,City Lights,Urban Flow,r&b,chill,0.58,92,0.68,0.80,0.18
+44,Wild Horses,Country Roads,country,adventurous,0.70,110,0.80,0.60,0.50
+45,Cosmic Dust,Alien Frequencies,techno,intense,0.90,135,0.50,0.88,0.08
+46,Silent Night,Piano Virtuoso,classical,peaceful,0.12,55,0.30,0.20,0.99
+47,Rebel Shout,The Uprising,alternative rock,aggressive,0.86,145,0.45,0.55,0.15
+48,Smooth Operator,Velvet Voices,soul,romantic,0.40,85,0.75,0.65,0.65
+49,Neon Sunrise,Synth Magic,synthwave,happy,0.80,118,0.82,0.75,0.20
+50,Jungle Beat,Tribal Rhythms,world,energetic,0.85,125,0.78,0.85,0.30

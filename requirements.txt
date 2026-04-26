@@ -1,3 +1,7 @@
 pandas
 pytest
 streamlit
+chromadb
+google-generativeai
+python-dotenv
+google-genai

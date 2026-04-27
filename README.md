@@ -1,5 +1,7 @@
 # 🎵 AI-Powered Music Recommender (RAG System)
 
+Link to Walkthrough (Loom Video): https://www.loom.com/share/96e368e50a7949d0bea53d72f1b89e77 
+
 ## The Original Project: Rule-Based Simulation
 Originally, this project was a "Music Recommender Simulation - TuneTribe. Its goal was to represent songs and user taste profiles as structured data and use hardcoded, mathematical scoring rules (e.g., adding points for matching genres or energy levels) to rank and recommend songs. While effective as a baseline, it lacked the ability to understand semantic nuances, musical context, or user intent beyond rigid formulas.
 
